@@ -1,0 +1,95 @@
+
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/moment.js"></script>
+
+<script type="text/javascript">
+	function getParameterByName( name,href )
+	{
+	  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+	  var regexS = "[\\?&]"+name+"=([^&#]*)";
+	  var regex = new RegExp( regexS );
+	  var results = regex.exec( href );
+	  if( results == null )
+	    return "";
+	  else
+	    return decodeURIComponent(results[1].replace(/\+/g, " "));
+	}
+	var radarID = "IDR714";
+	var radarDur = 100;
+	var step = 6;
+	if(getParameterByName("id",document.URL)) {
+		radarID = getParameterByName("id",document.URL);
+	}
+	if(getParameterByName("dur",document.URL)) {
+		radarDur = getParameterByName("dur",document.URL);
+	}
+	if(getParameterByName("step",document.URL)) {
+		step = getParameterByName("step",document.URL);
+	}
+	$(function(){
+ 
+        var myDate = new Date();
+
+        var d2 = moment();
+        var hour = d2.format("HH");
+        d2 = d2.hour(myDate.getHours()).minutes(0);
+
+        var d = d2.subtract("days","2").subtract("hours","10").subtract("minutes","30");
+        
+        window.setInterval(function(){
+        	
+        	d = d.add("minutes", step);
+        	if (d.isAfter(moment().subtract("hours","11").valueOf())) {
+        		d2 = moment();
+		        hour = d2.format("HH");
+		        d2 = d2.hour(myDate.getHours()).minutes(0);
+
+		        d = d2.subtract("days","2").subtract("hours","10").subtract("minutes","12");
+        	}
+
+
+
+            $('#img').attr('src','http://wac.72dd.edgecastcdn.net/8072DD/radimg/radar/'+radarID+'.T.'+d.format("YYYY")+d.format("MM")+d.format("DD")+d.format("HH") + d.format("mm") +'.png');
+        },radarDur);        
+        $("#img1").attr("src","http://www.bom.gov.au/products/radar_transparencies/"+radarID+".topography.png");
+		$("#img2").attr("src","http://www.bom.gov.au/products/radar_transparencies/"+radarID+".range.png");
+		$("#img3").attr("src","http://www.bom.gov.au/products/radar_transparencies/"+radarID+".locations.png");
+		$("#img4").attr("src","http://www.bom.gov.au/products/radar_transparencies/"+radarID+".background.png");
+		$("#delay").attr("value",radarDur);
+		$("#id").val(radarID);
+    });
+	
+</script>
+</head>
+<body>
+<div style="text-align:center;margin:0 auto;width:512px">
+<form method="get">
+<select name="id" style="z-index:10" id="id">
+	<option value="IDR714">Sydney (64k)</option>
+	<option value="IDR713">Sydney (128k)</option>
+  	<option value="IDR712">Sydney (256k)</option>
+</select>
+<input type="text" placeholder="delay" name="dur" style="width:60px" id="delay" value="100"/>ms
+<input type="submit" />
+</form>
+</div>
+<div style="position:relative;width:512px;height:512px;margin:0 auto;">
+<img id="img" style="position:absolute;top:0;left:0;z-index:5"/>
+<img id="img1" style="position:absolute;top:0;left:0;z-index:4"/>
+<img id="img2" style="position:absolute;top:0;left:0;z-index:5"/>
+<img id="img3" style="position:absolute;top:0;left:0;z-index:5"/>
+<img id="img4" style="position:absolute;top:0;left:0;z-index:1"/>
+</div>
+<div style="text-align:center;margin:0 auto;width:512px">
+<p>This was written because it was raining and I wanted to see what the radar of the last 2 days looked like in a loop. It <em>is</em> customised for Sydney, but might work with other radar codes if you want to try them.</p>
+<p>If you want to use a radar with a different step (the sydney radars have a step of 6 minutes), then you can add the step=n parameter to the URL, where n is the number in minutes.</p>
+</div>
+
+
+
+
+
+</body>
+</html>
