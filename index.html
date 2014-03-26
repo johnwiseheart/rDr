@@ -19,6 +19,7 @@
 	var radarID = "IDR714";
 	var radarDur = 100;
 	var step = 6;
+	var lenhours = 48;
 	if(getParameterByName("id",document.URL)) {
 		radarID = getParameterByName("id",document.URL);
 	}
@@ -28,6 +29,9 @@
 	if(getParameterByName("step",document.URL)) {
 		step = getParameterByName("step",document.URL);
 	}
+    if(getParameterByName("len",document.URL)) {
+            lenhours = getParameterByName("len",document.URL);
+    }
 	$(function(){
  
         var myDate = new Date();
@@ -36,7 +40,7 @@
         var hour = d2.format("HH");
         d2 = d2.hour(myDate.getHours()).minutes(0);
 
-        var d = d2.subtract("days","2").subtract("hours","10").subtract("minutes","30");
+        var d = d2.subtract("hours",lenhours).subtract("hours","10").subtract("minutes","30");
         
         window.setInterval(function(){
         	
@@ -46,7 +50,7 @@
 		        hour = d2.format("HH");
 		        d2 = d2.hour(myDate.getHours()).minutes(0);
 
-		        d = d2.subtract("days","2").subtract("hours","10").subtract("minutes","12");
+		        d = d2.subtract("hours", lenhours).subtract("hours","10").subtract("minutes","12");
         	}
 
 
@@ -58,6 +62,7 @@
 		$("#img3").attr("src","http://www.bom.gov.au/products/radar_transparencies/"+radarID+".locations.png");
 		$("#img4").attr("src","http://www.bom.gov.au/products/radar_transparencies/"+radarID+".background.png");
 		$("#delay").attr("value",radarDur);
+		$("#hours").attr("value",lenhours);
 		$("#id").val(radarID);
     });
 	
@@ -72,6 +77,7 @@
   	<option value="IDR712">Sydney (256k)</option>
 </select>
 <input type="text" placeholder="delay" name="dur" style="width:60px" id="delay" value="100"/>ms
+<input type="text" placeholder="hours" name="len" style="width:60px" id="hours" value="48"/>hours
 <input type="submit" />
 </form>
 </div>
@@ -85,6 +91,7 @@
 <div style="text-align:center;margin:0 auto;width:512px">
 <p>This was written because it was raining and I wanted to see what the radar of the last 2 days looked like in a loop. It <em>is</em> customised for Sydney, but might work with other radar codes if you want to try them.</p>
 <p>If you want to use a radar with a different step (the sydney radars have a step of 6 minutes), then you can add the step=n parameter to the URL, where n is the number in minutes.</p>
+<p>Fix my dodgy javascript <a href="https://github.com/johnwiseheart/rDr">here</a>.</p>
 </div>
 
 
